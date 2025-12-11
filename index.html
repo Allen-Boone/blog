@@ -1,0 +1,2675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T20 | 交流社区论坛</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-tertiary: #999999;
+            --border-color: #d9d9d9;
+            --border-light: #f0f0f0;
+            --shadow-color: rgba(0,0,0,0.1);
+            --link-color: #1890ff;
+            --hover-bg: #f0f5ff;
+        }
+
+        body.dark-mode {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #262626;
+            --text-primary: #e8e8e8;
+            --text-secondary: #b8b8b8;
+            --text-tertiary: #808080;
+            --border-color: #404040;
+            --border-light: #333333;
+            --shadow-color: rgba(0,0,0,0.3);
+            --link-color: #4da6ff;
+            --hover-bg: #2a3a52;
+        }
+
+        body.minimal-mode {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9f9f9;
+            --text-primary: #2d2d2d;
+            --text-secondary: #727272;
+            --text-tertiary: #a0a0a0;
+            --border-color: #e8e8e8;
+            --border-light: #f0f0f0;
+            --shadow-color: rgba(0,0,0,0.08);
+            --link-color: #0066cc;
+            --hover-bg: #f5f5f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        body.dark-mode header {
+            background: var(--bg-primary);
+            box-shadow: 0 2px 8px var(--shadow-color);
+            border-bottom-color: var(--border-color);
+        }
+
+        body.minimal-mode header {
+            background: var(--bg-primary);
+            box-shadow: 0 1px 2px var(--shadow-color);
+            border-bottom-color: var(--border-color);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1890ff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background: var(--hover-bg);
+            transform: scale(1.1);
+        }
+
+        .theme-menu {
+            position: relative;
+        }
+
+        .theme-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            z-index: 10;
+            min-width: 180px;
+            display: none;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        body.dark-mode .theme-dropdown {
+            background: var(--bg-primary);
+            border-color: var(--border-color);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        body.minimal-mode .theme-dropdown {
+            background: var(--bg-primary);
+            border-color: var(--border-color);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .theme-dropdown.show {
+            display: block;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            color: #666;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s;
+        }
+
+        .theme-option:last-child {
+            border-bottom: none;
+        }
+
+        .theme-option:hover {
+            background: linear-gradient(90deg, #f0f5ff 0%, #f8fbff 100%);
+            color: #1890ff;
+        }
+
+        .theme-option.active {
+            background: #f0f5ff;
+            color: #1890ff;
+            font-weight: 500;
+        }
+
+        .theme-option.active::after {
+            content: '✓';
+            margin-left: auto;
+            font-weight: bold;
+        }
+
+        body.dark-mode .theme-option {
+            color: var(--text-secondary);
+            border-bottom-color: var(--border-light);
+        }
+
+        body.dark-mode .theme-option:hover {
+            background: var(--hover-bg);
+            color: var(--link-color);
+        }
+
+        body.dark-mode .theme-option.active {
+            background: var(--hover-bg);
+            color: var(--link-color);
+        }
+
+        body.minimal-mode .theme-option {
+            color: var(--text-secondary);
+            border-bottom-color: var(--border-color);
+        }
+
+        body.minimal-mode .theme-option:hover {
+            background: var(--hover-bg);
+            color: var(--link-color);
+        }
+
+        body.minimal-mode .theme-option.active {
+            background: var(--hover-bg);
+            color: var(--link-color);
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 20px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .quick-post-btn {
+            background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .quick-post-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+        }
+
+        .quick-post-btn.hidden {
+            display: none;
+        }
+
+        .scroll-to-top-fixed {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--link-color);
+            background: white;
+            color: var(--link-color);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .scroll-to-top-fixed:hover {
+            background: var(--link-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .side-toolbar {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 998;
+        }
+
+        .theme-menu-fixed {
+            position: relative;
+        }
+
+        .theme-toggle-fixed {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle-fixed:hover {
+            background: var(--hover-bg);
+            transform: scale(1.1);
+        }
+
+        .theme-dropdown-fixed {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            z-index: 10;
+            min-width: 180px;
+            display: none;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+
+        .theme-dropdown-fixed.show {
+            display: block;
+        }
+
+        body.dark-mode .theme-dropdown-fixed {
+            background: var(--bg-primary);
+            border-color: var(--border-color);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        body.minimal-mode .theme-dropdown-fixed {
+            background: var(--bg-primary);
+            border-color: var(--border-color);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        body.dark-mode .scroll-to-top-fixed {
+            background: var(--bg-secondary);
+            border-color: var(--link-color);
+            color: var(--link-color);
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+
+        body.dark-mode .scroll-to-top-fixed:hover {
+            background: var(--link-color);
+            color: #000;
+        }
+
+        body.minimal-mode .scroll-to-top-fixed {
+            background: var(--bg-secondary);
+            border-color: var(--link-color);
+            color: var(--link-color);
+        }
+
+        body.minimal-mode .scroll-to-top-fixed:hover {
+            background: var(--link-color);
+            color: white;
+        }
+
+        .nav-buttons-inline {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .nav-buttons-inline.hidden {
+            display: none;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #fafafa;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .search-box input {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .search-box input {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #1890ff;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
+        }
+
+        body.dark-mode .search-box input:focus {
+            background: var(--bg-secondary);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #f0f2f5 0%, #fafbfc 100%);
+            border-radius: 6px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .user-info:hover {
+            background: linear-gradient(135deg, #e6e8eb 0%, #f0f2f5 100%);
+            border-color: #d9d9d9;
+        }
+
+        body.dark-mode .user-info {
+            background: linear-gradient(135deg, #2a2a2a 0%, #252525 100%);
+            border-color: transparent;
+        }
+
+        body.dark-mode .user-info:hover {
+            background: linear-gradient(135deg, #323232 0%, #2d2d2d 100%);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .user-info {
+            background: var(--bg-secondary);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .user-info:hover {
+            background: var(--hover-bg);
+            border-color: var(--border-color);
+        }
+
+        .user-menu-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            z-index: 10;
+            min-width: 160px;
+            display: none;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        body.dark-mode .user-menu-dropdown {
+            background: var(--bg-primary);
+            border-color: var(--border-color);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        body.minimal-mode .user-menu-dropdown {
+            background: var(--bg-primary);
+            border-color: var(--border-color);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .user-menu-dropdown.show {
+            display: block;
+        }
+
+        .user-menu-dropdown a {
+            display: block;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #666;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-menu-dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .user-menu-dropdown a:hover {
+            background: linear-gradient(90deg, #f0f5ff 0%, #f8fbff 100%);
+            color: #1890ff;
+        }
+
+        body.dark-mode .user-menu-dropdown a {
+            color: var(--text-secondary);
+            border-bottom-color: var(--border-light);
+        }
+
+        body.dark-mode .user-menu-dropdown a:hover {
+            background: var(--hover-bg);
+            color: var(--link-color);
+        }
+
+        body.minimal-mode .user-menu-dropdown a {
+            color: var(--text-secondary);
+            border-bottom-color: var(--border-color);
+        }
+
+        body.minimal-mode .user-menu-dropdown a:hover {
+            background: var(--hover-bg);
+            color: var(--link-color);
+        }
+
+        .btn {
+            padding: 9px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1890ff 0%, #0050b3 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #1890ff;
+            border: 1.5px solid #1890ff;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #f0f5ff 0%, #f8fbff 100%);
+            border-color: #40a9ff;
+            color: #0050b3;
+        }
+
+        body.dark-mode .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--link-color);
+            border-color: var(--link-color);
+        }
+
+        body.dark-mode .btn-secondary:hover {
+            background: var(--hover-bg);
+            border-color: #4da6ff;
+            color: #4da6ff;
+        }
+
+        body.minimal-mode .btn-primary {
+            background: var(--link-color);
+            box-shadow: 0 1px 4px rgba(0, 102, 204, 0.2);
+        }
+
+        body.minimal-mode .btn-primary:hover {
+            background: #0052a3;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            border: 1px solid #f0f0f0;
+        }
+
+        body.dark-mode .modal-content {
+            background: var(--bg-primary);
+            box-shadow: 0 4px 16px var(--shadow-color);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .modal-content {
+            background: var(--bg-primary);
+            box-shadow: 0 2px 8px var(--shadow-color);
+            border-color: var(--border-color);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        body.dark-mode .modal-header {
+            border-bottom-color: var(--border-color);
+        }
+
+        body.minimal-mode .modal-header {
+            border-bottom-color: var(--border-color);
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #1890ff;
+        }
+
+        body.dark-mode .close-btn {
+            color: var(--text-tertiary);
+        }
+
+        body.dark-mode .close-btn:hover {
+            color: var(--link-color);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group textarea,
+        body.dark-mode .form-group select {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        .form-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        /* Categories Navigation */
+        .categories {
+            background: white;
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            flex-wrap: wrap;
+            overflow-x: auto;
+            gap: 6px;
+            border: 1px solid #f0f0f0;
+        }
+
+        body.dark-mode .categories {
+            background: var(--bg-primary);
+            box-shadow: 0 2px 8px var(--shadow-color);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .categories {
+            background: var(--bg-primary);
+            box-shadow: 0 1px 4px var(--shadow-color);
+            border-color: var(--border-color);
+        }
+
+        .category-item {
+            padding: 10px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            border-radius: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            border: 1px solid transparent;
+            background: transparent;
+        }
+
+        .category-item:hover {
+            background: linear-gradient(135deg, #f0f5ff 0%, #f8fbff 100%);
+            color: #1890ff;
+            border-color: #d9e9ff;
+        }
+
+        .category-item.active {
+            background: linear-gradient(135deg, #1890ff 0%, #0050b3 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+        }
+
+        body.dark-mode .category-item {
+            color: var(--text-secondary);
+            border-color: transparent;
+        }
+
+        body.dark-mode .category-item:hover {
+            background: var(--hover-bg);
+            color: var(--link-color);
+        }
+
+        body.dark-mode .category-item.active {
+            background: var(--link-color);
+            color: white;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+
+        body.minimal-mode .category-item {
+            color: var(--text-secondary);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .category-item:hover {
+            background: var(--hover-bg);
+            color: var(--link-color);
+        }
+
+        body.minimal-mode .category-item.active {
+            background: var(--link-color);
+            color: white;
+            border-color: var(--link-color);
+            box-shadow: none;
+        }
+
+        /* Posts List */
+        .posts-container {
+            display: grid;
+            gap: 16px;
+        }
+
+        .post-item {
+            background: white;
+            border-radius: 8px;
+            padding: 18px;
+            display: grid;
+            grid-template-columns: 60px 1fr 120px;
+            gap: 16px;
+            align-items: start;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #f0f0f0;
+        }
+
+        body.dark-mode .post-item {
+            background: var(--bg-primary);
+            box-shadow: 0 1px 4px var(--shadow-color);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .post-item {
+            background: var(--bg-primary);
+            box-shadow: 0 1px 2px var(--shadow-color);
+            border-color: var(--border-color);
+        }
+
+        .post-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            border-color: #1890ff;
+            transform: translateY(-2px);
+        }
+
+        body.dark-mode .post-item:hover {
+            box-shadow: 0 4px 12px var(--shadow-color);
+            border-color: var(--link-color);
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .avatar.small {
+            width: 40px;
+            height: 40px;
+            font-size: 14px;
+        }
+
+        .post-content {
+            min-width: 0;
+        }
+
+        .post-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1890ff;
+            word-break: break-word;
+            transition: color 0.3s;
+        }
+
+        .post-item:hover .post-title {
+            color: #0050b3;
+        }
+
+        body.dark-mode .post-title {
+            color: var(--link-color);
+        }
+
+        body.minimal-mode .post-title {
+            color: var(--link-color);
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        body.dark-mode .post-meta {
+            color: var(--text-tertiary);
+        }
+
+        body.minimal-mode .post-meta {
+            color: var(--text-tertiary);
+        }
+
+        .post-category {
+            display: inline-block;
+            background: linear-gradient(135deg, #f0f5ff 0%, #f8fbff 100%);
+            color: #1890ff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid #d9e9ff;
+        }
+
+        body.dark-mode .post-category {
+            background: var(--hover-bg);
+            color: var(--link-color);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .post-category {
+            background: var(--hover-bg);
+            color: var(--link-color);
+            border-color: var(--border-color);
+        }
+            padding: 4px 8px;
+            border-radius: 2px;
+            font-size: 12px;
+        }
+
+        .post-author {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .post-stats {
+            text-align: right;
+            display: flex;
+            gap: 16px;
+            justify-content: flex-end;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-number {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1890ff;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Post Detail */
+        .post-detail {
+            background: white;
+            border-radius: 4px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+        }
+
+        .post-detail-header {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .post-detail-content {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            background: white;
+            border-radius: 4px;
+            padding: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+        }
+
+        .comments-header {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .comment-form {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 12px;
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: #1890ff;
+            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+        }
+
+        .comment {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .comment:last-child {
+            border-bottom: none;
+        }
+
+        .comment-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .comment-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .comment-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .comment-content {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-left: 52px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+
+        .alert-success {
+            background: #f6ffed;
+            color: #274e0e;
+            border: 1px solid #b7eb8f;
+        }
+
+        .alert-error {
+            background: #fff1f0;
+            color: #820014;
+            border: 1px solid #ffa39e;
+        }
+
+        .alert-info {
+            background: #e6f7ff;
+            color: #003a8c;
+            border: 1px solid #91d5ff;
+        }
+
+        body.dark-mode .alert-success {
+            background: #162312;
+            color: #b7eb8f;
+            border-color: #596f1e;
+        }
+
+        body.dark-mode .alert-error {
+            background: #2f0f0c;
+            color: #ff7875;
+            border-color: #7d3f2f;
+        }
+
+        body.dark-mode .alert-info {
+            background: #0f2d4d;
+            color: #91d5ff;
+            border-color: #3f5a73;
+        }
+
+        body.minimal-mode .alert-success {
+            background: #f3f8f0;
+            color: #2d5016;
+            border-color: #b7e5a0;
+        }
+
+        body.minimal-mode .alert-error {
+            background: #fef6f4;
+            color: #7d1417;
+            border-color: #ffbab5;
+        }
+
+        body.minimal-mode .alert-info {
+            background: #f0f7ff;
+            color: #0d3a8c;
+            border-color: #aad6ff;
+        }
+
+        /* Table Dark Mode */
+        body.dark-mode table {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        body.dark-mode thead {
+            background: var(--bg-primary) !important;
+        }
+
+        body.dark-mode thead tr {
+            border-bottom-color: var(--border-color) !important;
+        }
+
+        body.dark-mode tbody tr {
+            border-bottom-color: var(--border-color);
+        }
+
+        body.dark-mode tbody tr:hover {
+            background: var(--bg-primary);
+        }
+
+        body.dark-mode td {
+            border-color: var(--border-color);
+        }
+
+        body.dark-mode .admin-tab {
+            color: var(--text-secondary);
+        }
+
+        body.dark-mode .admin-tab.active {
+            color: #4da6ff;
+        }
+
+        /* Comment Section Dark Mode */
+        body.dark-mode .comment-name {
+            color: var(--text-primary);
+        }
+
+        body.dark-mode .comment-time {
+            color: var(--text-tertiary);
+        }
+
+        body.dark-mode .comment-content {
+            color: var(--text-secondary);
+        }
+
+        /* Post Detail Dark Mode */
+        body.dark-mode .post-detail {
+            background: var(--bg-secondary);
+            box-shadow: 0 1px 2px var(--shadow-color);
+        }
+
+        body.dark-mode .post-detail-header {
+            border-bottom-color: var(--border-color);
+        }
+
+        body.dark-mode .comment {
+            background: var(--bg-primary);
+            border-left-color: var(--border-color);
+        }
+
+        /* Button Dark Mode Hover */
+        body.dark-mode .btn:hover {
+            opacity: 0.8;
+        }
+
+        /* Modal Container Dark Mode */
+        body.dark-mode .modal-container {
+            background: rgba(0,0,0,0.7);
+        }
+
+        /* ===== Minimal Mode Global Styles ===== */
+        body.minimal-mode {
+            background-color: var(--bg-secondary);
+        }
+
+        body.minimal-mode table {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        body.minimal-mode thead {
+            background: var(--bg-primary) !important;
+        }
+
+        body.minimal-mode thead tr {
+            border-bottom-color: var(--border-color) !important;
+        }
+
+        body.minimal-mode tbody tr {
+            border-bottom-color: var(--border-color);
+        }
+
+        body.minimal-mode tbody tr:hover {
+            background: var(--hover-bg);
+        }
+
+        body.minimal-mode td {
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .admin-tab {
+            color: var(--text-secondary);
+        }
+
+        body.minimal-mode .admin-tab.active {
+            color: var(--link-color);
+        }
+
+        body.minimal-mode .comment-name {
+            color: var(--text-primary);
+        }
+
+        body.minimal-mode .comment-time {
+            color: var(--text-tertiary);
+        }
+
+        body.minimal-mode .comment-content {
+            color: var(--text-secondary);
+        }
+
+        body.minimal-mode .post-detail {
+            background: var(--bg-secondary);
+            box-shadow: 0 1px 2px var(--shadow-color);
+        }
+
+        body.minimal-mode .post-detail-header {
+            border-bottom-color: var(--border-color);
+        }
+
+        body.minimal-mode .comment {
+            background: var(--bg-primary);
+            border-left-color: var(--border-color);
+        }
+
+        body.minimal-mode .btn:hover {
+            opacity: 0.85;
+        }
+
+        body.minimal-mode .post-author {
+            color: var(--text-secondary);
+        }
+
+        body.minimal-mode .post-category {
+            background: var(--hover-bg);
+            color: var(--link-color);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .user-info:hover {
+            background: var(--hover-bg);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .form-group input,
+        body.minimal-mode .form-group textarea,
+        body.minimal-mode .form-group select {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .form-group input:focus,
+        body.minimal-mode .form-group textarea:focus,
+        body.minimal-mode .form-group select:focus {
+            border-color: var(--link-color);
+            outline: none;
+        }
+
+        body.minimal-mode .comment-form textarea {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        body.minimal-mode .comment-form textarea:focus {
+            border-color: var(--link-color);
+            outline: none;
+        }
+
+        body.minimal-mode .post-stats {
+            color: var(--text-secondary);
+        }
+
+        body.minimal-mode .stat-number {
+            color: var(--link-color);
+        }
+
+        body.minimal-mode .stat-label {
+            color: var(--text-tertiary);
+        }
+
+        /* Modal Container Minimal Mode */
+        body.minimal-mode .modal-container {
+            background: rgba(0,0,0,0.4);
+        }
+
+        /* 公告栏样式 */
+        .announcement-bar {
+            background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
+            border-bottom: 2px solid #1890ff;
+            padding: 12px 0;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
+        }
+
+        body.dark-mode .announcement-bar {
+            background: linear-gradient(135deg, #111d2c 0%, #15395b 100%);
+            border-bottom-color: #4da6ff;
+            box-shadow: 0 2px 8px rgba(77, 166, 255, 0.15);
+        }
+
+        body.minimal-mode .announcement-bar {
+            background: linear-gradient(135deg, #f0f7ff 0%, #cce9ff 100%);
+            border-bottom-color: #0066cc;
+        }
+
+        .announcement-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow: hidden;
+            height: 40px;
+        }
+
+        .announcement-label {
+            white-space: nowrap;
+            font-weight: 600;
+            color: #1890ff;
+            font-size: 14px;
+        }
+
+        body.dark-mode .announcement-label {
+            color: #4da6ff;
+        }
+
+        body.minimal-mode .announcement-label {
+            color: #0066cc;
+        }
+
+        .announcement-scroll {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .announcement-text {
+            animation: scroll 30s linear infinite;
+            white-space: nowrap;
+            color: #333;
+            font-size: 14px;
+        }
+
+        body.dark-mode .announcement-text {
+            color: var(--text-primary);
+        }
+
+        body.minimal-mode .announcement-text {
+            color: var(--text-primary);
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Footer样式 */
+        footer {
+            background: #f5f5f5;
+            border-top: 1px solid #e8e8e8;
+            margin-top: 40px;
+            padding: 40px 20px;
+        }
+
+        body.dark-mode footer {
+            background: var(--bg-primary);
+            border-top-color: var(--border-color);
+        }
+
+        body.minimal-mode footer {
+            background: var(--bg-secondary);
+            border-top-color: var(--border-color);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1890ff;
+        }
+
+        body.dark-mode .footer-section h3 {
+            color: var(--link-color);
+        }
+
+        body.minimal-mode .footer-section h3 {
+            color: var(--link-color);
+        }
+
+        .footer-section p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #666;
+            margin: 0 0 8px 0;
+        }
+
+        body.dark-mode .footer-section p {
+            color: var(--text-secondary);
+        }
+
+        body.minimal-mode .footer-section p {
+            color: var(--text-secondary);
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #e8e8e8;
+            padding-top: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        body.dark-mode .footer-bottom {
+            border-top-color: var(--border-color);
+            color: var(--text-tertiary);
+        }
+
+        body.minimal-mode .footer-bottom {
+            border-top-color: var(--border-color);
+            color: var(--text-tertiary);
+        }
+
+        .footer-bottom a {
+            color: #1890ff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-bottom a:hover {
+            color: #0050b3;
+        }
+
+        body.dark-mode .footer-bottom a {
+            color: var(--link-color);
+        }
+
+        body.dark-mode .footer-bottom a:hover {
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .announcement-content {
+                padding: 0 12px;
+            }
+        }
+
+        /* Footer Links */
+        .footer-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: #f5f5f5;
+            border-top: 1px solid #d9d9d9;
+        }
+
+        .footer-links div {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+            .header-container {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .search-box {
+                order: 3;
+                flex-basis: 100%;
+                max-width: none;
+                margin: 0;
+            }
+
+            .post-item {
+                grid-template-columns: 1fr;
+                padding: 12px;
+            }
+
+            .post-stats {
+                justify-content: flex-start;
+            }
+
+            .category-item {
+                flex: 0 0 auto;
+                min-width: 80px;
+                padding: 12px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Side Toolbar -->
+    <div class="side-toolbar">
+        <div class="theme-menu-fixed">
+            <button class="theme-toggle-fixed" onclick="toggleThemeMenu()" title="切换主题">💡</button>
+            <div class="theme-dropdown-fixed" id="themeDropdownFixed">
+                <div class="theme-option" onclick="setTheme('light')">
+                    <span>☀️</span>
+                    <span>亮色模式</span>
+                </div>
+                <div class="theme-option" onclick="setTheme('dark')">
+                    <span>🌙</span>
+                    <span>暗黑模式</span>
+                </div>
+                <div class="theme-option" onclick="setTheme('minimal')">
+                    <span>✨</span>
+                    <span>精简模式</span>
+                </div>
+            </div>
+        </div>
+        <button class="scroll-to-top-fixed" id="scrollToTopBtn" onclick="scrollToTop()" title="返回顶部">↑</button>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <span>�</span>
+                <span>T20 | 交流社区论坛</span>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="搜索帖子、用户..." id="searchInput">
+            </div>
+            <div class="header-actions">
+                <button class="quick-post-btn hidden" id="quickPostBtn" onclick="openPostModal()" title="快速发贴">✍️ 发贴</button>
+                <div id="guestNav" class="nav-buttons-inline">
+                    <button class="btn btn-secondary" onclick="openLoginModal()">登录</button>
+                    <button class="btn btn-primary" onclick="openRegisterModal()">注册</button>
+                    <button class="btn btn-secondary" style="background: #722ed1; color: white; border: none;" onclick="openAdminLoginModal()">管理员</button>
+                </div>
+                <div id="userNav" class="nav-buttons-inline hidden">
+                    <div class="user-menu">
+                        <div class="user-info" onclick="toggleUserMenu()">
+                            <span id="userAvatar" class="avatar small">A</span>
+                            <span id="userName">用户</span>
+                        </div>
+                        <div class="user-menu-dropdown" id="userMenuDropdown">
+                            <a onclick="goToProfile()">我的资料</a>
+                            <a onclick="logout()">退出登录</a>
+                        </div>
+                    </div>
+                </div>
+                <div id="adminNav" class="nav-buttons-inline hidden">
+                    <div class="user-menu">
+                        <div class="user-info" style="background: #722ed1; color: white;" onclick="toggleAdminMenu()">
+                            <span>⚙️</span>
+                            <span id="adminName">管理员</span>
+                        </div>
+                        <div class="user-menu-dropdown" id="adminMenuDropdown">
+                            <a onclick="goToAdminPanel()">管理面板</a>
+                            <a onclick="adminLogout()">退出管理</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Home View -->
+        <div id="homeView">
+            <!-- Categories Navigation -->
+            <div class="categories">
+                <a href="#" class="category-item active" onclick="filterByCategory('全部', event)">全部</a>
+                <a href="#" class="category-item" onclick="filterByCategory('日常', event)">日常</a>
+                <a href="#" class="category-item" onclick="filterByCategory('技术', event)">技术</a>
+                <a href="#" class="category-item" onclick="filterByCategory('情报', event)">情报</a>
+                <a href="#" class="category-item" onclick="filterByCategory('测评', event)">测评</a>
+                <a href="#" class="category-item" onclick="filterByCategory('交易', event)">交易</a>
+                <a href="#" class="category-item" onclick="filterByCategory('拼车', event)">拼车</a>
+                <a href="#" class="category-item" onclick="filterByCategory('推广', event)">推广</a>
+            </div>
+
+            <!-- Announcement Bar -->
+            <div class="announcement-bar">
+                <div class="announcement-content">
+                    <span class="announcement-label">📢 公告</span>
+                    <div class="announcement-scroll">
+                        <div class="announcement-text" id="announcementText">欢迎来到 T20 交流社区论坛！这是一个优质的知识共享和经验交流平台，为全球华人技术社区提供高质量的讨论环境。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Posts Container -->
+            <div class="posts-container" id="postsContainer"></div>
+        </div>
+
+        <!-- Post Detail View -->
+        <div id="postDetailView" class="hidden">
+            <div id="postDetail"></div>
+            <div id="commentsSection"></div>
+        </div>
+
+        <!-- Admin Panel View -->
+        <div id="adminPanelView" class="hidden">
+            <div style="background: white; border-radius: 4px; padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">
+                <div style="margin-bottom: 24px;">
+                    <button class="btn btn-secondary" onclick="goHome()">← 返回</button>
+                </div>
+                <h1 style="margin-bottom: 20px; color: #722ed1;">📊 管理面板</h1>
+                
+                <!-- Tabs -->
+                <div class="admin-tabs" style="display: flex; gap: 0; border-bottom: 1px solid #f0f0f0; margin-bottom: 20px;">
+                    <button class="admin-tab active" onclick="switchAdminTab('users', event)" style="padding: 12px 16px; border: none; background: none; cursor: pointer; border-bottom: 2px solid #722ed1; color: #722ed1;">👥 用户管理</button>
+                    <button class="admin-tab" onclick="switchAdminTab('posts', event)" style="padding: 12px 16px; border: none; background: none; cursor: pointer; color: #999;">📝 帖子管理</button>
+                    <button class="admin-tab" onclick="switchAdminTab('comments', event)" style="padding: 12px 16px; border: none; background: none; cursor: pointer; color: #999;">💬 评论管理</button>
+                    <button class="admin-tab" onclick="switchAdminTab('settings', event)" style="padding: 12px 16px; border: none; background: none; cursor: pointer; color: #999;">⚙️ 系统设置</button>
+                </div>
+
+                <!-- Users Tab -->
+                <div id="adminUsersTab">
+                    <h2 style="margin-bottom: 16px;">注册用户</h2>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f5f5f5; border-bottom: 1px solid #d9d9d9;">
+                                <th style="padding: 12px; text-align: left;">ID</th>
+                                <th style="padding: 12px; text-align: left;">用户名</th>
+                                <th style="padding: 12px; text-align: left;">邮箱</th>
+                                <th style="padding: 12px; text-align: left;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUsersList">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Posts Tab -->
+                <div id="adminPostsTab" class="hidden">
+                    <h2 style="margin-bottom: 16px;">所有帖子</h2>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f5f5f5; border-bottom: 1px solid #d9d9d9;">
+                                <th style="padding: 12px; text-align: left;">ID</th>
+                                <th style="padding: 12px; text-align: left;">标题</th>
+                                <th style="padding: 12px; text-align: left;">作者</th>
+                                <th style="padding: 12px; text-align: left;">分类</th>
+                                <th style="padding: 12px; text-align: left;">浏览</th>
+                                <th style="padding: 12px; text-align: left;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminPostsList">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Comments Tab -->
+                <div id="adminCommentsTab" class="hidden">
+                    <h2 style="margin-bottom: 16px;">所有评论</h2>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f5f5f5; border-bottom: 1px solid #d9d9d9;">
+                                <th style="padding: 12px; text-align: left;">ID</th>
+                                <th style="padding: 12px; text-align: left;">内容</th>
+                                <th style="padding: 12px; text-align: left;">作者</th>
+                                <th style="padding: 12px; text-align: left;">帖子</th>
+                                <th style="padding: 12px; text-align: left;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminCommentsList">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="adminSettingsTab" class="hidden">
+                    <h2 style="margin-bottom: 16px;">系统统计</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                        <div style="background: #f5f5f5; padding: 16px; border-radius: 4px;">
+                            <div style="font-size: 12px; color: #999; margin-bottom: 8px;">总用户数</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #1890ff;" id="statUsers">0</div>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 16px; border-radius: 4px;">
+                            <div style="font-size: 12px; color: #999; margin-bottom: 8px;">总帖子数</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #52c41a;" id="statPosts">0</div>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 16px; border-radius: 4px;">
+                            <div style="font-size: 12px; color: #999; margin-bottom: 8px;">总评论数</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #faad14;" id="statComments">0</div>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 16px; border-radius: 4px;">
+                            <div style="font-size: 12px; color: #999; margin-bottom: 8px;">总浏览数</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #f5222d;" id="statViews">0</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <h3 style="margin-bottom: 16px;">危险操作</h3>
+                        <button class="btn" style="background: #f5222d; color: white; padding: 8px 16px;" onclick="clearAllData()">清空所有数据</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>注册账号</h2>
+                <button class="close-btn" onclick="closeRegisterModal()">&times;</button>
+            </div>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" id="regUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <div class="form-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeRegisterModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">注册</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>登录账号</h2>
+                <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="form-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeLoginModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">登录</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>发布新帖</h2>
+                <button class="close-btn" onclick="closePostModal()">&times;</button>
+            </div>
+            <form onsubmit="handleCreatePost(event)">
+                <div class="form-group">
+                    <label>标题</label>
+                    <input type="text" id="postTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>分类</label>
+                    <select id="postCategory" required>
+                        <option value="日常">日常</option>
+                        <option value="技术">技术</option>
+                        <option value="情报">情报</option>
+                        <option value="测评">测评</option>
+                        <option value="交易">交易</option>
+                        <option value="拼车">拼车</option>
+                        <option value="推广">推广</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>内容</label>
+                    <textarea id="postContent" required></textarea>
+                </div>
+                <div class="form-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closePostModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">发布</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 管理员登录</h2>
+                <button class="close-btn" onclick="closeAdminLoginModal()">&times;</button>
+            </div>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="form-group">
+                    <label>管理员账号</label>
+                    <input type="text" id="adminUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>管理员密码</label>
+                    <input type="password" id="adminPassword" required>
+                </div>
+                <div style="font-size: 12px; color: #999; margin-bottom: 16px;">
+                    默认账号: <strong>admin</strong> / 密码: <strong>admin123</strong>
+                </div>
+                <div class="form-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeAdminLoginModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">登录</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 管理员账号
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'admin123';
+
+        // Local Storage based data management
+        let currentUser = null;
+        let currentAdmin = null;
+        let currentCategory = '全部';
+        let currentPostId = null;
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        let comments = JSON.parse(localStorage.getItem('comments')) || [];
+        let admins = JSON.parse(localStorage.getItem('admins')) || [];
+
+        // Initialize admin data
+        if (admins.length === 0) {
+            admins = [
+                { id: 1, username: ADMIN_USERNAME, password: ADMIN_PASSWORD, name: '超级管理员' }
+            ];
+            localStorage.setItem('admins', JSON.stringify(admins));
+        }
+
+        // Dark Mode Toggle Function
+        function toggleThemeMenu() {
+            const dropdownFixed = document.getElementById('themeDropdownFixed');
+            dropdownFixed.classList.toggle('show');
+        }
+
+        function setTheme(theme) {
+            // 移除所有主题类
+            document.body.classList.remove('dark-mode', 'minimal-mode');
+            
+            // 添加选中的主题
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else if (theme === 'minimal') {
+                document.body.classList.add('minimal-mode');
+            }
+            
+            // 保存主题偏好
+            localStorage.setItem('theme-preference', theme);
+            updateThemeOptions();
+            
+            // 关闭菜单
+            document.getElementById('themeDropdown').classList.remove('show');
+        }
+
+        function updateThemeOptions() {
+            const options = document.querySelectorAll('.theme-option');
+            let currentTheme = localStorage.getItem('theme-preference') || 'light';
+            
+            options.forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            const isDark = document.body.classList.contains('dark-mode');
+            const isMinimal = document.body.classList.contains('minimal-mode');
+            
+            if (isDark) currentTheme = 'dark';
+            if (isMinimal) currentTheme = 'minimal';
+            
+            // 设置active状态
+            if (currentTheme === 'dark') {
+                options[1].classList.add('active');
+            } else if (currentTheme === 'minimal') {
+                options[2].classList.add('active');
+            } else {
+                options[0].classList.add('active');
+            }
+        }
+
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('theme-preference') || 'light';
+            setTheme(savedTheme);
+        }
+
+        // 点击外部关闭主题菜单
+        document.addEventListener('click', (e) => {
+            const themeMenu = document.querySelector('.theme-menu');
+            if (themeMenu && !themeMenu.contains(e.target)) {
+                document.getElementById('themeDropdown').classList.remove('show');
+            }
+        });
+
+        // Initialize sample data
+        function initSampleData() {
+            if (posts.length === 0) {
+                posts = [
+                    {
+                        id: 1,
+                        username: 'shuai',
+                        avatar: 'S',
+                        title: 'nodeimage.com 正式版发布！附带论坛内自动上传图片脚本',
+                        content: '这是一个很好的工具，可以让论坛用户直接上传图片到我们的服务器。',
+                        category: '日常',
+                        views: 197920,
+                        created_at: new Date(Date.now() - 2 * 60000).toISOString()
+                    },
+                    {
+                        id: 2,
+                        username: '躺平',
+                        avatar: 'T',
+                        title: '收点建站好使的机器或者MJJ的传家宝',
+                        content: '各位大佬有没有推荐的建站主机？',
+                        category: '交易',
+                        views: 177,
+                        created_at: new Date(Date.now() - 9000).toISOString()
+                    },
+                    {
+                        id: 3,
+                        username: 'vyayun',
+                        avatar: 'V',
+                        title: '【抽奖】【微亚云新品推出】应广大NS客户要求，微亚云新品震撼推出',
+                        content: '我们最近推出了一些新产品，欢迎大家来体验！',
+                        category: '日常',
+                        views: 2040,
+                        created_at: new Date(Date.now() - 10000).toISOString()
+                    },
+                    {
+                        id: 4,
+                        username: 'lium',
+                        avatar: 'L',
+                        title: '想收dmit的一个迈锐宝',
+                        content: '如果有闲置的迈锐宝，欢迎联系我。',
+                        category: '交易',
+                        views: 223,
+                        created_at: new Date(Date.now() - 11000).toISOString()
+                    },
+                    {
+                        id: 5,
+                        username: 'hello798',
+                        avatar: 'H',
+                        title: '【出】SpeedOnline 香港 BVS - 入门版 循环8折',
+                        content: '优质主机，性价比很高。',
+                        category: '交易',
+                        views: 29,
+                        created_at: new Date(Date.now() - 23000).toISOString()
+                    }
+                ];
+                comments = [
+                    {
+                        id: 1,
+                        post_id: 1,
+                        username: 'iceCola',
+                        avatar: 'I',
+                        content: '赞一个！这个工具真不错。',
+                        created_at: new Date(Date.now() - 1 * 3600000).toISOString()
+                    }
+                ];
+                localStorage.setItem('posts', JSON.stringify(posts));
+                localStorage.setItem('comments', JSON.stringify(comments));
+            }
+        }
+
+        // Modal functions
+        function openRegisterModal() {
+            document.getElementById('registerModal').classList.add('show');
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').classList.remove('show');
+        }
+
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('show');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('show');
+        }
+
+        function openPostModal() {
+            if (!currentUser) {
+                openLoginModal();
+                return;
+            }
+            document.getElementById('postModal').classList.add('show');
+        }
+
+        function closePostModal() {
+            document.getElementById('postModal').classList.remove('show');
+        }
+
+        // Auth functions
+        function handleRegister(e) {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            if (users.find(u => u.username === username)) {
+                showAlert('用户名已存在', 'error');
+                return;
+            }
+
+            users.push({
+                id: users.length + 1,
+                username,
+                email,
+                password,
+                avatar: username.charAt(0).toUpperCase()
+            });
+
+            localStorage.setItem('users', JSON.stringify(users));
+            currentUser = { username, email, avatar: username.charAt(0).toUpperCase() };
+            updateUserUI();
+            closeRegisterModal();
+            loadPosts('全部');
+            showAlert('注册成功！', 'success');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (!user) {
+                showAlert('用户名或密码错误', 'error');
+                return;
+            }
+
+            currentUser = {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                avatar: user.avatar
+            };
+
+            updateUserUI();
+            closeLoginModal();
+            loadPosts('全部');
+            showAlert('登录成功！', 'success');
+        }
+
+        function logout() {
+            currentUser = null;
+            updateUserUI();
+            loadPosts('全部');
+            toggleUserMenu();
+            showAlert('已退出登录', 'info');
+        }
+
+        function updateUserUI() {
+            const guestNav = document.getElementById('guestNav');
+            const userNav = document.getElementById('userNav');
+            const adminNav = document.getElementById('adminNav');
+            const quickPostBtn = document.getElementById('quickPostBtn');
+
+            if (currentAdmin) {
+                guestNav.classList.add('hidden');
+                userNav.classList.add('hidden');
+                adminNav.classList.remove('hidden');
+                document.getElementById('adminName').textContent = '管理员';
+                quickPostBtn.classList.add('hidden');
+            } else if (currentUser) {
+                guestNav.classList.add('hidden');
+                userNav.classList.remove('hidden');
+                adminNav.classList.add('hidden');
+                document.getElementById('userName').textContent = currentUser.username;
+                document.getElementById('userAvatar').textContent = currentUser.avatar;
+                quickPostBtn.classList.remove('hidden');
+            } else {
+                guestNav.classList.remove('hidden');
+                userNav.classList.add('hidden');
+                adminNav.classList.add('hidden');
+                quickPostBtn.classList.add('hidden');
+            }
+        }
+
+        function toggleUserMenu() {
+            document.getElementById('userMenuDropdown').classList.toggle('show');
+        }
+
+        // Posts functions
+        function loadPosts(category = '全部') {
+            currentCategory = category;
+            const container = document.getElementById('postsContainer');
+            container.innerHTML = '';
+
+            let filtered = posts;
+            if (category !== '全部') {
+                filtered = posts.filter(p => p.category === category);
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">暂无帖子</div>';
+                return;
+            }
+
+            filtered.forEach(post => {
+                const postEl = document.createElement('a');
+                postEl.href = '#';
+                postEl.className = 'post-item';
+                postEl.onclick = (e) => {
+                    e.preventDefault();
+                    viewPost(post.id);
+                };
+
+                const postComments = comments.filter(c => c.post_id === post.id).length;
+
+                postEl.innerHTML = `
+                    <div class="avatar">${post.avatar}</div>
+                    <div class="post-content">
+                        <div class="post-title">${escapeHtml(post.title)}</div>
+                        <div class="post-meta">
+                            <span class="post-author">${escapeHtml(post.username)}</span>
+                            <span class="post-category">${escapeHtml(post.category)}</span>
+                            <span>${formatTime(post.created_at)}</span>
+                        </div>
+                    </div>
+                    <div class="post-stats">
+                        <div class="stat">
+                            <div class="stat-number">${post.views}</div>
+                            <div class="stat-label">浏览</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">${postComments}</div>
+                            <div class="stat-label">回复</div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(postEl);
+            });
+        }
+
+        function handleCreatePost(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('postTitle').value;
+            const content = document.getElementById('postContent').value;
+            const category = document.getElementById('postCategory').value;
+
+            const newPost = {
+                id: Math.max(...posts.map(p => p.id), 0) + 1,
+                username: currentUser.username,
+                avatar: currentUser.avatar,
+                title,
+                content,
+                category,
+                views: 0,
+                created_at: new Date().toISOString()
+            };
+
+            posts.unshift(newPost);
+            localStorage.setItem('posts', JSON.stringify(posts));
+
+            closePostModal();
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postContent').value = '';
+            loadPosts(category);
+            showAlert('帖子发布成功！', 'success');
+        }
+
+        function viewPost(postId) {
+            currentPostId = postId;
+            const post = posts.find(p => p.id === postId);
+
+            if (!post) return;
+
+            post.views++;
+            localStorage.setItem('posts', JSON.stringify(posts));
+
+            const homeView = document.getElementById('homeView');
+            const detailView = document.getElementById('postDetailView');
+
+            homeView.classList.add('hidden');
+            detailView.classList.remove('hidden');
+
+            const detailHTML = `
+                <div class="post-detail">
+                    <div style="margin-bottom: 16px;">
+                        <button class="btn btn-secondary" onclick="goHome()">← 返回列表</button>
+                    </div>
+                    <div class="post-detail-header">
+                        <div class="avatar">${post.avatar}</div>
+                        <div>
+                            <h1 style="margin-bottom: 8px;">${escapeHtml(post.title)}</h1>
+                            <div class="post-meta">
+                                <span class="post-author">${escapeHtml(post.username)}</span>
+                                <span class="post-category">${escapeHtml(post.category)}</span>
+                                <span>${formatTime(post.created_at)}</span>
+                            </div>
+                            <div class="post-meta" style="margin-top: 8px;">
+
+                                <span>${post.views} 浏览</span>
+                                <span>${comments.filter(c => c.post_id === postId).length} 回复</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-detail-content">${escapeHtml(post.content).replace(/\n/g, '<br>')}</div>
+                </div>
+            `;
+
+            document.getElementById('postDetail').innerHTML = detailHTML;
+            loadComments(postId);
+        }
+
+        function loadComments(postId) {
+            const postComments = comments.filter(c => c.post_id === postId);
+
+            let commentsHTML = `
+                <div class="comments-section">
+                    <div class="comments-header">评论 (${postComments.length})</div>
+            `;
+
+            if (currentUser) {
+                commentsHTML += `
+                    <div class="comment-form">
+                        <textarea id="commentInput" placeholder="写点想法..."></textarea>
+                        <button class="btn btn-primary" onclick="postComment(${postId})">发表评论</button>
+                    </div>
+                `;
+            } else {
+                commentsHTML += `
+                    <div class="alert alert-info">
+                        <a href="#" onclick="openLoginModal(); return false;">登录</a> 后发表评论
+                    </div>
+                `;
+            }
+
+            if (postComments.length > 0) {
+                postComments.forEach(comment => {
+                    commentsHTML += `
+                        <div class="comment">
+                            <div class="comment-author">
+                                <div class="avatar small">${comment.avatar}</div>
+                                <div>
+                                    <div class="comment-name">${escapeHtml(comment.username)}</div>
+                                    <div class="comment-time">${formatTime(comment.created_at)}</div>
+                                </div>
+                            </div>
+                            <div class="comment-content">${escapeHtml(comment.content).replace(/\n/g, '<br>')}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                commentsHTML += '<div class="alert alert-info">暂无评论，来发表第一条吧！</div>';
+            }
+
+            commentsHTML += '</div>';
+            document.getElementById('commentsSection').innerHTML = commentsHTML;
+        }
+
+        function postComment(postId) {
+            const content = document.getElementById('commentInput').value;
+
+            if (!content.trim()) {
+                showAlert('评论不能为空', 'error');
+                return;
+            }
+
+            const newComment = {
+                id: Math.max(...comments.map(c => c.id), 0) + 1,
+                post_id: postId,
+                username: currentUser.username,
+                avatar: currentUser.avatar,
+                content,
+                created_at: new Date().toISOString()
+            };
+
+            comments.push(newComment);
+            localStorage.setItem('comments', JSON.stringify(comments));
+
+            document.getElementById('commentInput').value = '';
+            loadComments(postId);
+            showAlert('评论发布成功！', 'success');
+        }
+
+        function goHome() {
+            currentPostId = null;
+            document.getElementById('homeView').classList.remove('hidden');
+            document.getElementById('postDetailView').classList.add('hidden');
+            loadPosts(currentCategory);
+        }
+
+        function filterByCategory(category, e) {
+            e.preventDefault();
+            document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
+            e.target.classList.add('active');
+            loadPosts(category);
+        }
+
+        function goToProfile() {
+            showAlert('个人资料功能开发中...', 'info');
+            toggleUserMenu();
+        }
+
+        // ===== Admin Functions =====
+        function openAdminLoginModal() {
+            document.getElementById('adminLoginModal').classList.add('show');
+        }
+
+        function closeAdminLoginModal() {
+            document.getElementById('adminLoginModal').classList.remove('show');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+
+            const admin = admins.find(a => a.username === username && a.password === password);
+
+            if (!admin) {
+                showAlert('管理员账号或密码错误', 'error');
+                return;
+            }
+
+            currentAdmin = { id: admin.id, username: admin.username, name: admin.name };
+            currentUser = null;
+            updateUserUI();
+            closeAdminLoginModal();
+            document.getElementById('adminUsername').value = '';
+            document.getElementById('adminPassword').value = '';
+            showAlert('管理员登录成功！', 'success');
+        }
+
+        function adminLogout() {
+            currentAdmin = null;
+            updateUserUI();
+            toggleAdminMenu();
+            loadPosts('全部');
+            document.getElementById('homeView').classList.remove('hidden');
+            document.getElementById('adminPanelView').classList.add('hidden');
+            showAlert('已退出管理员身份', 'info');
+        }
+
+        function toggleAdminMenu() {
+            document.getElementById('adminMenuDropdown').classList.toggle('show');
+        }
+
+        function goToAdminPanel() {
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('postDetailView').classList.add('hidden');
+            document.getElementById('adminPanelView').classList.remove('hidden');
+            toggleAdminMenu();
+            refreshAdminPanel();
+        }
+
+        function refreshAdminPanel() {
+            // Refresh users
+            const usersList = document.getElementById('adminUsersList');
+            usersList.innerHTML = '';
+            users.forEach(user => {
+                usersList.innerHTML += `
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 12px;">${user.id}</td>
+                        <td style="padding: 12px;">${escapeHtml(user.username)}</td>
+                        <td style="padding: 12px;">${escapeHtml(user.email)}</td>
+                        <td style="padding: 12px;">
+                            <button class="btn" style="background: #ff4d4f; color: white; padding: 6px 12px; font-size: 12px;" 
+                                onclick="adminDeleteUser(${user.id})">删除</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // Refresh posts
+            const postsList = document.getElementById('adminPostsList');
+            postsList.innerHTML = '';
+            posts.forEach(post => {
+                postsList.innerHTML += `
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 12px;">${post.id}</td>
+                        <td style="padding: 12px;">${escapeHtml(post.title.substring(0, 30))}</td>
+                        <td style="padding: 12px;">${escapeHtml(post.username)}</td>
+                        <td style="padding: 12px;">${escapeHtml(post.category)}</td>
+                        <td style="padding: 12px;">${post.views}</td>
+                        <td style="padding: 12px;">
+                            <button class="btn" style="background: #ff4d4f; color: white; padding: 6px 12px; font-size: 12px;" 
+                                onclick="adminDeletePost(${post.id})">删除</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // Refresh comments
+            const commentsList = document.getElementById('adminCommentsList');
+            commentsList.innerHTML = '';
+            comments.forEach(comment => {
+                const post = posts.find(p => p.id === comment.post_id);
+                commentsList.innerHTML += `
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 12px;">${comment.id}</td>
+                        <td style="padding: 12px;">${escapeHtml(comment.content.substring(0, 30))}</td>
+                        <td style="padding: 12px;">${escapeHtml(comment.username)}</td>
+                        <td style="padding: 12px;">${post ? escapeHtml(post.title.substring(0, 20)) : '已删除'}</td>
+                        <td style="padding: 12px;">
+                            <button class="btn" style="background: #ff4d4f; color: white; padding: 6px 12px; font-size: 12px;" 
+                                onclick="adminDeleteComment(${comment.id})">删除</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // Refresh stats
+            const totalViews = posts.reduce((sum, p) => sum + p.views, 0);
+            document.getElementById('statUsers').textContent = users.length;
+            document.getElementById('statPosts').textContent = posts.length;
+            document.getElementById('statComments').textContent = comments.length;
+            document.getElementById('statViews').textContent = totalViews;
+        }
+
+        function switchAdminTab(tabName, e) {
+            e.preventDefault();
+            // Hide all tabs
+            document.getElementById('adminUsersTab').classList.add('hidden');
+            document.getElementById('adminPostsTab').classList.add('hidden');
+            document.getElementById('adminCommentsTab').classList.add('hidden');
+            document.getElementById('adminSettingsTab').classList.add('hidden');
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.admin-tab').forEach(btn => {
+                btn.style.borderBottomColor = 'transparent';
+                btn.style.color = '#999';
+            });
+
+            // Show selected tab
+            document.getElementById('admin' + tabName.charAt(0).toUpperCase() + tabName.slice(1) + 'Tab').classList.remove('hidden');
+            e.target.style.borderBottomColor = '#722ed1';
+            e.target.style.color = '#722ed1';
+        }
+
+        function adminDeleteUser(userId) {
+            if (confirm('确定要删除该用户吗？此操作不可恢复。')) {
+                users = users.filter(u => u.id !== userId);
+                localStorage.setItem('users', JSON.stringify(users));
+                refreshAdminPanel();
+                showAlert('用户已删除', 'success');
+            }
+        }
+
+        function adminDeletePost(postId) {
+            if (confirm('确定要删除该帖子吗？此操作不可恢复。')) {
+                posts = posts.filter(p => p.id !== postId);
+                comments = comments.filter(c => c.post_id !== postId);
+                localStorage.setItem('posts', JSON.stringify(posts));
+                localStorage.setItem('comments', JSON.stringify(comments));
+                refreshAdminPanel();
+                showAlert('帖子已删除', 'success');
+            }
+        }
+
+        function adminDeleteComment(commentId) {
+            if (confirm('确定要删除该评论吗？此操作不可恢复。')) {
+                comments = comments.filter(c => c.id !== commentId);
+                localStorage.setItem('comments', JSON.stringify(comments));
+                refreshAdminPanel();
+                showAlert('评论已删除', 'success');
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('确定要清空所有数据吗？此操作不可恢复！') && confirm('再次确认：清空所有用户、帖子和评论数据？')) {
+                users = [];
+                posts = [];
+                comments = [];
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('posts', JSON.stringify(posts));
+                localStorage.setItem('comments', JSON.stringify(comments));
+                refreshAdminPanel();
+                showAlert('所有数据已清空', 'success');
+            }
+        }
+
+        // Utilities
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatTime(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = now - date;
+
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (minutes < 1) return '刚刚';
+            if (minutes < 60) return `${minutes}分钟前`;
+            if (hours < 24) return `${hours}小时前`;
+            if (days < 30) return `${days}天前`;
+
+            return date.toLocaleDateString('zh-CN');
+        }
+
+        function showAlert(message, type = 'info') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alert.style.position = 'fixed';
+            alert.style.top = '80px';
+            alert.style.right = '20px';
+            alert.style.zIndex = '999';
+            alert.style.maxWidth = '400px';
+
+            document.body.appendChild(alert);
+
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+
+        // Scroll to top functionality
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.addEventListener('scroll', () => {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+            if (window.scrollY > 300) {
+                scrollBtn.classList.add('show');
+            } else {
+                scrollBtn.classList.remove('show');
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdown = document.getElementById('userMenuDropdown');
+            if (userMenu && !userMenu.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            initSampleData();
+            checkAuth();
+        });
+
+        function checkAuth() {
+            loadThemePreference();
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUserUI();
+            }
+            loadPosts('全部');
+        }
+
+        // Save current user when logging in/out
+        window.addEventListener('beforeunload', () => {
+            if (currentUser) {
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            } else {
+                localStorage.removeItem('currentUser');
+            }
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>关于我们</h3>
+                    <p>T20 交流社区论坛是一个为全球华人提供高质量知识分享和经验交流的平台。致力于打造最佳的技术社区。</p>
+                </div>
+                <div class="footer-section">
+                    <h3>联系方式</h3>
+                    <div class="contact-info">📧 邮箱: 0832388@gmail.com</div>
+                    <div class="contact-info">📺 电报频道: @eziyuan_1</div>
+                    <div class="contact-info">👥 电报群组: @eziyuan_2</div>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:8px;">
+                        <a href="/" style="color:var(--text-secondary);text-decoration:none;">首页</a>
+                        <a href="/guide" style="color:var(--text-secondary);text-decoration:none;">用户指南</a>
+                        <a href="/rules" style="color:var(--text-secondary);text-decoration:none;">社区规则</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>法律声明</h3>
+                    <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:8px;">
+                        <a href="/terms" style="color:var(--text-secondary);text-decoration:none;">服务条款</a>
+                        <a href="/privacy" style="color:var(--text-secondary);text-decoration:none;">隐私政策</a>
+                        <a href="/contact" style="color:var(--text-secondary);text-decoration:none;">联系我们</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                Copyright © 2022 - 2025 All rights reserved | T20 交流社区论坛
+            </div>
+        </footer>
+</body>
+</html>
